@@ -1,0 +1,73 @@
+"""String enum constants used across models, schemas and services.
+
+Stored as plain strings in the DB (portable across PostgreSQL/SQLite) and
+validated at the schema/service layer.
+"""
+
+
+class Role:
+    SUPER_ADMIN = "SUPER_ADMIN"
+    COMPANY_ADMIN = "COMPANY_ADMIN"
+    EMPLOYEE = "EMPLOYEE"
+    ALL = {SUPER_ADMIN, COMPANY_ADMIN, EMPLOYEE}
+    ADMINS = {SUPER_ADMIN, COMPANY_ADMIN}
+
+
+class UserStatus:
+    ACTIVE = "ACTIVE"
+    INACTIVE = "INACTIVE"
+    SUSPENDED = "SUSPENDED"
+    ALL = {ACTIVE, INACTIVE, SUSPENDED}
+
+
+class CompanyStatus:
+    ACTIVE = "ACTIVE"
+    INACTIVE = "INACTIVE"
+    ALL = {ACTIVE, INACTIVE}
+
+
+class EmployeeStatus:
+    ACTIVE = "ACTIVE"
+    INACTIVE = "INACTIVE"
+    ALL = {ACTIVE, INACTIVE}
+
+
+class AttendanceStatus:
+    IN_PROGRESS = "IN_PROGRESS"
+    ON_BREAK = "ON_BREAK"
+    COMPLETED = "COMPLETED"
+    ABSENT = "ABSENT"
+    PRESENT = "PRESENT"
+    MISSED_PUNCH = "MISSED_PUNCH"
+    MANUAL_ADJUSTMENT = "MANUAL_ADJUSTMENT"
+    ALL = {
+        IN_PROGRESS,
+        ON_BREAK,
+        COMPLETED,
+        ABSENT,
+        PRESENT,
+        MISSED_PUNCH,
+        MANUAL_ADJUSTMENT,
+    }
+
+
+class BreakType:
+    REGULAR = "REGULAR"
+    LUNCH = "LUNCH"
+    OTHER = "OTHER"
+    ALL = {REGULAR, LUNCH, OTHER}
+
+
+class AuditAction:
+    LOGIN = "LOGIN"
+    LOGOUT = "LOGOUT"
+    PUNCH_IN = "PUNCH_IN"
+    BREAK_START = "BREAK_START"
+    BREAK_END = "BREAK_END"
+    PUNCH_OUT = "PUNCH_OUT"
+    EMPLOYEE_CREATED = "EMPLOYEE_CREATED"
+    EMPLOYEE_UPDATED = "EMPLOYEE_UPDATED"
+    COMPANY_CREATED = "COMPANY_CREATED"
+    COMPANY_UPDATED = "COMPANY_UPDATED"
+    ATTENDANCE_MANUAL_ADJUSTMENT = "ATTENDANCE_MANUAL_ADJUSTMENT"
+    PASSWORD_RESET = "PASSWORD_RESET"
