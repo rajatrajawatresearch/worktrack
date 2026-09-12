@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "WorkTrack",
+    "slug": "worktrack",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "scheme": "worktrack",
+    "newArchEnabled": false,
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#0F172A"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.worktrack.mobile",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "WorkTrack uses your location only while the app is open to verify you are at your registered office when you punch in, take a break, or punch out. Your location is not tracked in the background."
+      }
+    },
+    "android": {
+      "package": "com.worktrack.mobile",
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"]
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "WorkTrack uses your location only while the app is open to verify you are at your registered office when recording attendance. Location is never collected in the background."
+        }
+      ]
+    ]
+  }
+}
