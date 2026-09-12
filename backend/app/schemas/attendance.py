@@ -47,6 +47,7 @@ class PunchResult(BaseModel):
     attendance: AttendanceOut
     location: LocationInfo
     current_work_minutes: int
+    on_break: bool = False
 
 
 # Admin list row (flattened with employee identity for tables/CSV)

@@ -7,6 +7,7 @@ across the codebase. Per-company overrides live on the `companies` /
 
 from functools import lru_cache
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -42,6 +43,17 @@ class Settings(BaseSettings):
     # Initial super admin (seed script only)
     SUPERADMIN_EMAIL: str = "superadmin@worktrack.local"
     SUPERADMIN_PASSWORD: str = "ChangeMe123!"
+
+    @field_validator("DATABASE_URL")
+    @classmethod
+    def _normalize_db_url(cls, v: str) -> str:
+        # Managed providers (Render/Neon/Heroku) hand out postgres:// or
+        # postgresql:// URLs. SQLAlchemy 2.0 needs an explicit driver.
+        if v.startswith("postgres://"):
+            return "postgresql+psycopg://" + v[len("postgres://") :]
+        if v.startswith("postgresql://"):
+            return "postgresql+psycopg://" + v[len("postgresql://") :]
+        return v
 
     @property
     def cors_origins_list(self) -> list[str]:

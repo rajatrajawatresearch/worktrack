@@ -143,9 +143,15 @@ def query_all(
 
 
 def status_counts(db: Session, company_id, att_date: date) -> dict[str, int]:
-    rows = db.execute(
-        select(Attendance.status, func.count())
-        .where(Attendance.company_id == company_id, Attendance.attendance_date == att_date)
-        .group_by(Attendance.status)
-    ).all()
+    stmt = select(Attendance.status, func.count()).where(Attendance.attendance_date == att_date)
+    if company_id is not None:
+        stmt = stmt.where(Attendance.company_id == company_id)
+    rows = db.execute(stmt.group_by(Attendance.status)).all()
     return {status: int(cnt) for status, cnt in rows}
+
+
+def count_on_date(db: Session, company_id, att_date: date) -> int:
+    stmt = select(func.count()).select_from(Attendance).where(Attendance.attendance_date == att_date)
+    if company_id is not None:
+        stmt = stmt.where(Attendance.company_id == company_id)
+    return db.scalar(stmt) or 0

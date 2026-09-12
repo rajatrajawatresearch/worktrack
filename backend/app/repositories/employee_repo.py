@@ -37,6 +37,10 @@ def count_by_company(db: Session, company_id) -> int:
     )
 
 
+def count_all(db: Session) -> int:
+    return db.scalar(select(func.count()).select_from(Employee)) or 0
+
+
 def list_by_company(
     db: Session,
     company_id,

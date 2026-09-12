@@ -2,7 +2,7 @@
 
 import hashlib
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import jwt
 from argon2 import PasswordHasher
@@ -35,7 +35,7 @@ def needs_rehash(password_hash: str) -> bool:
 
 # ---- Time ----
 def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 # ---- JWT ----

@@ -1,12 +1,12 @@
 """Working-time calculations. Server timestamps are the source of truth."""
 
 from collections.abc import Iterable
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 
 def _aware(dt: datetime) -> datetime:
     """Treat naive datetimes (possible on SQLite) as UTC."""
-    return dt if dt.tzinfo is not None else dt.replace(tzinfo=timezone.utc)
+    return dt if dt.tzinfo is not None else dt.replace(tzinfo=UTC)
 
 
 def _minutes_between(start: datetime, end: datetime) -> float:

@@ -1,0 +1,37 @@
+# WorkTrack — development stack.  Run:  docker compose up --build
+# Brings up PostgreSQL + the FastAPI backend (auto-migrates + seeds demo data).
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-worktrack}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-worktrack}
+      POSTGRES_DB: ${POSTGRES_DB:-worktrack}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" # exposed for local dev convenience only (prod does NOT expose)
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-worktrack}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-worktrack}:${POSTGRES_PASSWORD:-worktrack}@postgres:5432/${POSTGRES_DB:-worktrack}
+      JWT_SECRET: ${JWT_SECRET:-dev-insecure-secret-change-me-please-0123456789}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://localhost:3000}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      SEED_SUPERADMIN: "1"
+      SEED_DEMO: "1"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+
+volumes:
+  pgdata:

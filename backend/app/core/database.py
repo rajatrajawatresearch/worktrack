@@ -24,9 +24,12 @@ SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, futu
 
 
 def get_db() -> Generator[Session, None, None]:
-    """FastAPI dependency that yields a DB session and always closes it."""
+    """FastAPI dependency that yields a DB session, rolls back on error, closes always."""
     db = SessionLocal()
     try:
         yield db
+    except Exception:
+        db.rollback()
+        raise
     finally:
         db.close()

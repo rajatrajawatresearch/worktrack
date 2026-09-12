@@ -11,6 +11,7 @@ from typing import Any
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from sqlalchemy.exc import IntegrityError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 logger = logging.getLogger("worktrack")
@@ -90,6 +91,10 @@ def register_exception_handlers(app: FastAPI) -> None:
         code = code_map.get(exc.status_code, "HTTP_ERROR")
         message = exc.detail if isinstance(exc.detail, str) else "Request failed."
         return _envelope(exc.status_code, code, message)
+
+    @app.exception_handler(IntegrityError)
+    async def _integrity(_: Request, exc: IntegrityError):  # noqa: ARG001
+        return _envelope(409, "CONFLICT", "This action conflicts with existing data.")
 
     @app.exception_handler(Exception)
     async def _unhandled(request: Request, exc: Exception):  # noqa: ARG001
